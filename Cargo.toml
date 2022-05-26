@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+
+[package]
+name                = "shr3"
+version             = "0.1.0"
+edition             = "2021"
+description         = "SHR3 shift register"
+authors             = ["Michael Buesch <m@bues.ch>"]
+license             = "MIT OR Apache-2.0"
+#readme              = "README.md"
+#repository          = "https://bues.ch/cgit/shr3rs.git"
+
+categories          = ["algorithms", "no-std"]
+keywords            = ["shr3", "random"]
+
+[dependencies]
+
+[build-dependencies]
+autocfg             = "1"
+
+# vim: ts=4 sw=4 expandtab
