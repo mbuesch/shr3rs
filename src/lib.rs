@@ -378,7 +378,7 @@ mod tests {
         let mut a = Shr3::new_state(42);
         for _ in 0..1000 {
             let b: u32 = a.get_minmax(60, 170);
-            assert!(b >= 60 && b <= 170);
+            assert!((60..=170).contains(&b));
         }
     }
 
@@ -387,11 +387,11 @@ mod tests {
         let mut a = Shr3::new_state(42);
         for _ in 0..1000 {
             let b: u32 = a.get_range(60..170);
-            assert!(b >= 60 && b < 170);
+            assert!((60..170).contains(&b));
         }
         for _ in 0..1000 {
             let b: u32 = a.get_range(60..=170);
-            assert!(b >= 60 && b <= 170);
+            assert!((60..=170).contains(&b));
         }
         for _ in 0..1000 {
             let b: u32 = a.get_range(..170);
