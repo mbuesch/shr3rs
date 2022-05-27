@@ -414,6 +414,31 @@ mod tests {
         let b: u32 = a.get_range(111..112);
         assert_eq!(b, 111);
     }
+
+/*
+    #[test]
+    fn test_cycle() {
+        let seed = 42;
+        let mut a = Shr3::new_state(seed);
+        let mut first = 0;
+        let mut second = 0;
+        for i in 0..=u32::MAX-2 {
+            let _: u32 = a.get_bits(1);
+            assert_ne!(a.state, seed);
+            match i {
+                0 => first = a.state,
+                1 => second = a.state,
+                _ => (),
+            }
+        }
+        let _: u32 = a.get_bits(1);
+        assert_eq!(a.state, seed);
+        let _: u32 = a.get_bits(1);
+        assert_eq!(a.state, first);
+        let _: u32 = a.get_bits(1);
+        assert_eq!(a.state, second);
+    }
+*/
 }
 
 // vim: ts=4 sw=4 expandtab
