@@ -353,6 +353,8 @@ mod tests {
             let b: u16 = a.get_bits(3);
             assert_eq!(b, exp);
         }
+        let b: u16 = a.get_bits(0);
+        assert_eq!(b, 0);
     }
 
     #[test]
@@ -371,6 +373,8 @@ mod tests {
             let b: u32 = a.get_max(100);
             assert!(b <= 100);
         }
+        let b: u32 = a.get_max(0);
+        assert_eq!(b, 0);
     }
 
     #[test]
@@ -380,6 +384,8 @@ mod tests {
             let b: u32 = a.get_minmax(60, 170);
             assert!((60..=170).contains(&b));
         }
+        let b: u32 = a.get_minmax(111, 111);
+        assert_eq!(b, 111);
     }
 
     #[test]
@@ -405,6 +411,8 @@ mod tests {
             let b: u32 = a.get_range(0xFFFF_FFF0..);
             assert!(b >= 0xFFFF_FFF0);
         }
+        let b: u32 = a.get_range(111..112);
+        assert_eq!(b, 111);
     }
 }
 
