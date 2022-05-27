@@ -106,19 +106,18 @@ impl Default for Shr3 {
     }
 }
 
-/// Internal trait for basic operations on the output type `T`.
-pub trait BaseOps<T>
-    where T: Copy,
+/// Internal trait for basic operations on the output type.
+pub trait BaseOps: Copy
 {
-    /// Number of bits in type `T`.
+    /// Number of bits in type `Self`.
     const NUMBITS: u8;
-    /// Smallest possible value of type `T`.
-    const MINVAL: T;
-    /// Biggest possible value of type `T`.
-    const MAXVAL: T;
+    /// Smallest possible value of type `Self`.
+    const MINVAL: Self;
+    /// Biggest possible value of type `Self`.
+    const MAXVAL: Self;
 
-    /// Convert an `u8` to `T`.
-    fn from_u8(v: u8) -> T;
+    /// Convert an `u8` to `Self`.
+    fn from_u8(v: u8) -> Self;
 
     /// Find last bit set in `self`.
     ///
@@ -131,7 +130,7 @@ pub trait BaseOps<T>
 macro_rules! impl_shr3_types {
     ($($t:ty),*) => {
         $(
-            impl BaseOps<$t> for $t {
+            impl BaseOps for $t {
                 const NUMBITS: u8 = <$t>::BITS as u8;
                 const MINVAL: $t = <$t>::MIN;
                 const MAXVAL: $t = <$t>::MAX;
@@ -156,7 +155,7 @@ impl_shr3_types!(u128);
 ///
 /// The type `T` can be either of u8, u16, u32, u64, u128 or usize.
 pub trait Shr3Ops<T>:
-    where T: Copy + BaseOps<T> + PartialOrd + Sub<Output=T> + Add<Output=T>,
+    where T: Copy + BaseOps + PartialOrd + Sub<Output=T> + Add<Output=T>,
 {
     /// Get a number of `bitcount` bits from SHR3 and store them in the lower
     /// bits of the returned type `T`.
@@ -225,7 +224,7 @@ pub trait Shr3Ops<T>:
 
 /// Shr3Ops for struct Shr3.
 impl<T> Shr3Ops<T> for Shr3
-    where T: Copy + BaseOps<T> + PartialOrd + Sub<Output=T> + Add<Output=T> + ShlAssign<u8> + BitOrAssign,
+    where T: Copy + BaseOps + PartialOrd + Sub<Output=T> + Add<Output=T> + ShlAssign<u8> + BitOrAssign,
 {
     fn get_bits(&mut self, bitcount: u8) -> T {
         debug_assert!(bitcount <= T::NUMBITS);
