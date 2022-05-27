@@ -107,7 +107,7 @@ impl Default for Shr3 {
 }
 
 /// Internal trait for basic operations on the output type.
-pub trait BaseOps: Copy
+pub trait BaseOps: Copy + PartialOrd + Sub<Output=Self> + Add<Output=Self>
 {
     /// Number of bits in type `Self`.
     const NUMBITS: u8;
@@ -155,7 +155,7 @@ impl_shr3_types!(u128);
 ///
 /// The type `T` can be either of u8, u16, u32, u64, u128 or usize.
 pub trait Shr3Ops<T>:
-    where T: Copy + BaseOps + PartialOrd + Sub<Output=T> + Add<Output=T>,
+    where T: BaseOps
 {
     /// Get a number of `bitcount` bits from SHR3 and store them in the lower
     /// bits of the returned type `T`.
@@ -224,7 +224,7 @@ pub trait Shr3Ops<T>:
 
 /// Shr3Ops for struct Shr3.
 impl<T> Shr3Ops<T> for Shr3
-    where T: Copy + BaseOps + PartialOrd + Sub<Output=T> + Add<Output=T> + ShlAssign<u8> + BitOrAssign,
+    where T: BaseOps + ShlAssign<u8> + BitOrAssign,
 {
     fn get_bits(&mut self, bitcount: u8) -> T {
         debug_assert!(bitcount <= T::NUMBITS);
