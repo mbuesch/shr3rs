@@ -7,14 +7,14 @@
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 //
 
-//! # SHR3: 3-shift register generator
+//! # SHR3: 3-shift register random number generator
 //!
 //! The SHR3 generator can be used to generate non-crypto random bits with only very few computations.
 //!
 //! It is suitable for running on very small and restricted hardware (e.g. small 8 bit microcontrollers).
 //! The SHR3 function is evaluated once per extracted random bit. The LSB of the SHR3 state is extracted as output.
 //!
-//! The generator has a cycle of approximately 4_000_000_000 bits.
+//! The generator has a cycle of approximately `4_000_000_000` bits.
 //! Do not use it to extract large amounts of random bits (more than a hundred MiB or so),
 //! unless you can tolerate looping back to the beginning of the random stream.
 //! It will loop back to the beginning after `2**32 - 1` iterations.

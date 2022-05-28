@@ -4,14 +4,14 @@
 name                = "shr3"
 version             = "0.1.0"
 edition             = "2021"
-description         = "SHR3 shift register"
+description         = "SHR3 - 3-shift register random number generator"
 authors             = ["Michael Buesch <m@bues.ch>"]
 license             = "MIT OR Apache-2.0"
-#readme              = "README.md"
-#repository          = "https://bues.ch/cgit/shr3rs.git"
+readme              = "README.md"
+repository          = "https://bues.ch/cgit/shr3rs.git"
 
 categories          = ["algorithms", "no-std"]
-keywords            = ["shr3", "random"]
+keywords            = ["shr3", "random", "prng"]
 
 [dependencies]
 
