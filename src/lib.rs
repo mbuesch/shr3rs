@@ -16,8 +16,8 @@
 //!
 //! The generator has a cycle of approximately 4_000_000_000 bits.
 //! Do not use it to extract large amounts of random bits (more than a hundred MiB or so),
-//! if you can't tolerate looping back to the beginning of the random stream.
-//! It will loop back to the beginning after 2**32 iterations.
+//! unless you can tolerate looping back to the beginning of the random stream.
+//! It will loop back to the beginning after `2**32 - 1` iterations.
 //!
 //! This generator is *not* cryptographically secure! Do not use it for cryptographic applications.
 //!
@@ -28,9 +28,9 @@
 //!
 //!     let mut shr3 = Shr3::new();                 // SHR3 with default seed (1).
 //!     let x: u8 = shr3.get();                     // Extract 8 bits from shr3.
-//!     let y: u16 = shr3.get_bits(10);             // Extract 10 bits from shr3 and store in lower bits of x.
-//!     assert_eq!(x, 0xF8);
-//!     assert_eq!(y, 0x2CC);
+//!     let y: u16 = shr3.get_bits(10);             // Extract 10 bits from shr3 and store in lower bits of y.
+//!     assert_eq!(x, 0xF8);                        // Extracted random value.
+//!     assert_eq!(y, 0x2CC);                       // Extracted random value.
 //!
 //!     let mut shr3 = Shr3::new_state(42);         // SHR3 with custom seed (42).
 //!
@@ -39,7 +39,7 @@
 //!
 //! # no_std
 //!
-//! This crate does not require the Rust stdlib. It does not link to std.
+//! This crate does not require the Rust std library. It does not link to std.
 
 #![no_std]
 
@@ -90,6 +90,9 @@ impl Shr3 {
     }
 
     /// Create a new SHR3 instance with user specified initial state.
+    ///
+    /// Special state 0: The SHR3 state must not be 0. If 0 is passed to this function,
+    ///                  then the state 0x7FFFFFFF is picked instead.
     #[inline]
     pub fn new_state(state: u32) -> Shr3 {
         Shr3 {
@@ -153,7 +156,7 @@ impl_shr3_types!(u128);
 
 /// Main operations for extracting bits from SHR3 generator.
 ///
-/// The type `T` can be either of u8, u16, u32, u64, u128 or usize.
+/// The type `T` can be either of `u8`, `u16`, `u32`, `u64`, `u128` or `usize`.
 pub trait Shr3Ops<T>:
     where T: BaseOps
 {
@@ -165,7 +168,7 @@ pub trait Shr3Ops<T>:
 
     /// Get as many bits from SHR3 as fit into the return type `T`.
     ///
-    /// Note: Consider using `get_bits()` instead, if you don't need all returned bits.
+    /// *Note*: Consider using `get_bits()` instead, if you don't need all returned bits.
     #[inline]
     fn get(&mut self) -> T {
         self.get_bits(T::NUMBITS)
@@ -173,13 +176,12 @@ pub trait Shr3Ops<T>:
 
     /// Get enough bits to construct a random value in the range between `min_value` and `max_value`.
     ///
-    /// Note: If the extracted range is of non-power-of-two size,
-    ///       then the number of bits extracted from the SHR3 generator will
-    ///       be bigger to ensure an even distribution of the returned values.
+    /// *Note*: If the extracted range is of non-power-of-two size,
+    ///        then the number of bits extracted from the SHR3 generator will
+    ///        be bigger to ensure an even distribution of the returned values.
     fn get_minmax(&mut self, min_value: T, max_value: T) -> T {
         debug_assert!(max_value >= min_value);
         let top = max_value - min_value;
-
         let num_bits = top.fls();
         let value = loop {
             let value = self.get_bits(num_bits);
@@ -192,9 +194,9 @@ pub trait Shr3Ops<T>:
 
     /// Get enough bits to construct a random value in the range between `0` and `max_value`.
     ///
-    /// Note: If the extracted range is of non-power-of-two size,
-    ///       then the number of bits extracted from the SHR3 generator will
-    ///       be bigger to ensure an even distribution of the returned values.
+    /// *Note*: If the extracted range is of non-power-of-two size,
+    ///        then the number of bits extracted from the SHR3 generator will
+    ///        be bigger to ensure an even distribution of the returned values.
     #[inline]
     fn get_max(&mut self, max_value: T) -> T {
         self.get_minmax(T::MINVAL, max_value)
@@ -202,9 +204,9 @@ pub trait Shr3Ops<T>:
 
     /// Get enough bits to construct a random value in the given `range`.
     ///
-    /// Note: If the extracted range is of non-power-of-two size,
-    ///       then the number of bits extracted from the SHR3 generator will
-    ///       be bigger to ensure an even distribution of the returned values.
+    /// *Note*: If the extracted range is of non-power-of-two size,
+    ///        then the number of bits extracted from the SHR3 generator will
+    ///        be bigger to ensure an even distribution of the returned values.
     fn get_range(&mut self, range: impl RangeBounds<T>) -> T {
         let min = match range.start_bound() {
             Bound::Included(x) => *x,
