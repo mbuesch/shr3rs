@@ -69,7 +69,7 @@ use core::ops::{
 /// `http://groups.google.com/group/sci.math/msg/9959175f66dd138f`
 ///
 /// `http://groups.google.com/group/sci.math/msg/7e499231fb1e58d3`
-pub fn shr3(mut state: u32) -> u32 {
+pub const fn shr3(mut state: u32) -> u32 {
     // Fixed variant with full cycle.
     state ^= state << 13;
     state ^= state >> 17;
@@ -85,7 +85,7 @@ pub struct Shr3 {
 impl Shr3 {
     /// Create a new SHR3 instance with default initial `state = 1`.
     #[inline]
-    pub fn new() -> Shr3 {
+    pub const fn new() -> Shr3 {
         Self::new_state(1)
     }
 
@@ -94,7 +94,7 @@ impl Shr3 {
     /// Special state 0: The SHR3 state must not be 0. If 0 is passed to this function,
     ///                  then the state 0x7FFFFFFF is picked instead.
     #[inline]
-    pub fn new_state(state: u32) -> Shr3 {
+    pub const fn new_state(state: u32) -> Shr3 {
         Shr3 {
             state: if state == 0 { 0x7FFFFFFF } else { state },
         }
