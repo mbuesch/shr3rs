@@ -13,6 +13,10 @@ repository          = "https://bues.ch/cgit/shr3rs.git"
 categories          = ["algorithms", "no-std"]
 keywords            = ["shr3", "random", "prng"]
 
+[features]
+default             = []
+__devmode__         = []    # Developer mode. Do not use.
+
 [dependencies]
 
 [build-dependencies]

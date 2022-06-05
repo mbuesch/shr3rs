@@ -42,11 +42,17 @@
 //! This crate does not require the Rust std library. It does not link to std.
 
 #![no_std]
+#![cfg_attr(target_arch="avr", feature(asm_experimental_arch))]
 
 pub mod prelude {
     pub use crate::Shr3;
     pub use crate::Shr3Ops;
 }
+
+#[cfg(not(feature="__devmode__"))]
+mod arch;
+#[cfg(feature="__devmode__")]
+pub mod arch;
 
 use core::ops::{
     Add,
@@ -69,11 +75,15 @@ use core::ops::{
 /// `http://groups.google.com/group/sci.math/msg/9959175f66dd138f`
 ///
 /// `http://groups.google.com/group/sci.math/msg/7e499231fb1e58d3`
-pub const fn shr3(mut state: u32) -> u32 {
-    // Fixed variant with full cycle.
-    state ^= state << 13;
-    state ^= state >> 17;
-    state ^= state << 5;
+///
+/// The fixed variant with a full `2**32 - 1` cycle is implemented.
+pub fn shr3(state: u32) -> u32 {
+    #[cfg(target_arch="avr")]
+    let state = arch::avr::shr3(state);
+
+    #[cfg(not(target_arch="avr"))]
+    let state = arch::generic::shr3(state);
+
     state
 }
 
