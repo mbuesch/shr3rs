@@ -43,6 +43,13 @@ shr3 = "0.1"
 
 This crate does not require the Rust std library. It does not link to std.
 
+# Optimized implementation
+
+This crate includes an optimized implementation for AVR 8-bit.
+
+All other architectures use the generic implementation.
+On most architectures, this generic implementation will be compiled to rather efficient code.
+
 # License
 
 Copyright (c) 2022 Michael Buesch <m@bues.ch>
