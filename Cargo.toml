@@ -2,7 +2,7 @@
 
 [package]
 name                = "shr3"
-version             = "0.1.0"
+version             = "1.0.0"
 edition             = "2021"
 description         = "SHR3 - 3-shift register random number generator"
 authors             = ["Michael Buesch <m@bues.ch>"]
