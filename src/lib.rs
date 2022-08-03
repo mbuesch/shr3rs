@@ -146,7 +146,7 @@ pub trait BaseOps: Copy
     /// Convert a wrapping unsigned to a bit identical Self.
     fn from_unsigned(v: Wrapping<Self::U>) -> Self;
     /// Convert self to a bit identical wrapping unsigned.
-    fn into_unsigned(&self) -> Wrapping<Self::U>;
+    fn to_unsigned(&self) -> Wrapping<Self::U>;
 
     /// Find last bit set in `self`.
     ///
@@ -175,7 +175,7 @@ macro_rules! impl_base_ops {
                     v.0
                 }
                 #[inline]
-                fn into_unsigned(&self) -> Wrapping<Self::U> {
+                fn to_unsigned(&self) -> Wrapping<Self::U> {
                     Wrapping(*self)
                 }
                 #[inline]
@@ -197,7 +197,7 @@ macro_rules! impl_base_ops {
                     v.0 as Self
                 }
                 #[inline]
-                fn into_unsigned(&self) -> Wrapping<Self::U> {
+                fn to_unsigned(&self) -> Wrapping<Self::U> {
                     Wrapping(*self as Self::U)
                 }
                 #[inline]
@@ -243,15 +243,15 @@ pub trait Shr3Ops<T>:
     ///        be bigger to ensure an even distribution of the returned values.
     fn get_minmax(&mut self, min_value: T, max_value: T) -> T {
         debug_assert!(max_value >= min_value);
-        let range = max_value.into_unsigned() - min_value.into_unsigned();
+        let range = max_value.to_unsigned() - min_value.to_unsigned();
         let num_bits = range.0.fls();
         let value = loop {
-            let value = self.get_bits(num_bits).into_unsigned();
+            let value = self.get_bits(num_bits).to_unsigned();
             if value <= range {
                 break value;
             }
         };
-        T::from_unsigned(value + min_value.into_unsigned())
+        T::from_unsigned(value + min_value.to_unsigned())
     }
 
     /// Get enough bits to construct a random value in the range between `0` and `max_value`.
@@ -294,11 +294,11 @@ impl<T> Shr3Ops<T> for Shr3
 {
     fn get_bits(&mut self, bitcount: u8) -> T {
         debug_assert!(bitcount <= T::NUMBITS);
-        let mut ret = T::from_u8(0).into_unsigned();
+        let mut ret = T::from_u8(0).to_unsigned();
         for _ in 0..bitcount {
             self.state = shr3(self.state);
             ret <<= 1;
-            ret |= T::from_u8(self.state as u8 & 1).into_unsigned();
+            ret |= T::from_u8(self.state as u8 & 1).to_unsigned();
         }
         T::from_unsigned(ret)
     }
@@ -419,23 +419,23 @@ mod tests {
         #[cfg(has_u128)]
         assert_eq!(i128::from_unsigned(Wrapping((-16_i128) as u128)), -16);
 
-        // into_unsigned (unsigned)
-        assert_eq!(0xF0_u8.into_unsigned(), Wrapping(0xF0_u8));
-        assert_eq!(0xF0_u16.into_unsigned(), Wrapping(0xF0_u16));
-        assert_eq!(0xF0_u32.into_unsigned(), Wrapping(0xF0_u32));
-        assert_eq!(0xF0_u64.into_unsigned(), Wrapping(0xF0_u64));
-        assert_eq!(0xF0_usize.into_unsigned(), Wrapping(0xF0_usize));
+        // to_unsigned (unsigned)
+        assert_eq!(0xF0_u8.to_unsigned(), Wrapping(0xF0_u8));
+        assert_eq!(0xF0_u16.to_unsigned(), Wrapping(0xF0_u16));
+        assert_eq!(0xF0_u32.to_unsigned(), Wrapping(0xF0_u32));
+        assert_eq!(0xF0_u64.to_unsigned(), Wrapping(0xF0_u64));
+        assert_eq!(0xF0_usize.to_unsigned(), Wrapping(0xF0_usize));
         #[cfg(has_u128)]
-        assert_eq!(0xF0_u128.into_unsigned(), Wrapping(0xF0_u128));
+        assert_eq!(0xF0_u128.to_unsigned(), Wrapping(0xF0_u128));
 
-        // into_unsigned (signed)
-        assert_eq!(-16_i8.into_unsigned(), Wrapping(0xF0_u8));
-        assert_eq!(-16_i16.into_unsigned(), Wrapping(0xFFF0_u16));
-        assert_eq!(-16_i32.into_unsigned(), Wrapping(0xFFFF_FFF0_u32));
-        assert_eq!(-16_i64.into_unsigned(), Wrapping(0xFFFF_FFFF_FFFF_FFF0_u64));
-        assert_eq!(-16_isize.into_unsigned(), Wrapping((-16_isize) as usize));
+        // to_unsigned (signed)
+        assert_eq!(-16_i8.to_unsigned(), Wrapping(0xF0_u8));
+        assert_eq!(-16_i16.to_unsigned(), Wrapping(0xFFF0_u16));
+        assert_eq!(-16_i32.to_unsigned(), Wrapping(0xFFFF_FFF0_u32));
+        assert_eq!(-16_i64.to_unsigned(), Wrapping(0xFFFF_FFFF_FFFF_FFF0_u64));
+        assert_eq!(-16_isize.to_unsigned(), Wrapping((-16_isize) as usize));
         #[cfg(has_u128)]
-        assert_eq!(-16_i128.into_unsigned(), Wrapping((-16_i128) as u128));
+        assert_eq!(-16_i128.to_unsigned(), Wrapping((-16_i128) as u128));
 
         // unsigned fls
         assert_eq!(0x00_u8.fls(), 0);
