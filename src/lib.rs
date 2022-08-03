@@ -429,13 +429,13 @@ mod tests {
         assert_eq!(0xF0_u128.to_unsigned(), Wrapping(0xF0_u128));
 
         // to_unsigned (signed)
-        assert_eq!(-16_i8.to_unsigned(), Wrapping(0xF0_u8));
-        assert_eq!(-16_i16.to_unsigned(), Wrapping(0xFFF0_u16));
-        assert_eq!(-16_i32.to_unsigned(), Wrapping(0xFFFF_FFF0_u32));
-        assert_eq!(-16_i64.to_unsigned(), Wrapping(0xFFFF_FFFF_FFFF_FFF0_u64));
-        assert_eq!(-16_isize.to_unsigned(), Wrapping((-16_isize) as usize));
+        assert_eq!((-16_i8).to_unsigned(), Wrapping(0xF0_u8));
+        assert_eq!((-16_i16).to_unsigned(), Wrapping(0xFFF0_u16));
+        assert_eq!((-16_i32).to_unsigned(), Wrapping(0xFFFF_FFF0_u32));
+        assert_eq!((-16_i64).to_unsigned(), Wrapping(0xFFFF_FFFF_FFFF_FFF0_u64));
+        assert_eq!((-16_isize).to_unsigned(), Wrapping((-16_isize) as usize));
         #[cfg(has_u128)]
-        assert_eq!(-16_i128.to_unsigned(), Wrapping((-16_i128) as u128));
+        assert_eq!((-16_i128).to_unsigned(), Wrapping((-16_i128) as u128));
 
         // unsigned fls
         assert_eq!(0x00_u8.fls(), 0);
