@@ -35,7 +35,7 @@ This generator is *not* cryptographically secure! Do not use it for cryptographi
 Add this to your Cargo.toml:
 
     [dependencies]
-    shr3 = "0.1"
+    shr3 = "1"
 
 # no_std
 
