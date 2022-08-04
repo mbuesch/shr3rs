@@ -18,7 +18,6 @@ This generator is *not* cryptographically secure! Do not use it for cryptographi
 
 # Example usage:
 
-```
     use shr3::prelude::*;
 
     let mut shr3 = Shr3::new();                 // SHR3 with default seed (1).
@@ -30,16 +29,13 @@ This generator is *not* cryptographically secure! Do not use it for cryptographi
     let mut shr3 = Shr3::new_state(42);         // SHR3 with custom seed (42).
 
     let mut shr3: Shr3 = Default::default();    // Alternative to Shr::new().
-```
 
 # Example Cargo.toml dependencies
 
 Add this to your Cargo.toml:
 
-```
-[dependencies]
-shr3 = "0.1"
-```
+    [dependencies]
+    shr3 = "0.1"
 
 # no_std
 
