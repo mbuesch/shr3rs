@@ -2,6 +2,8 @@
 
 [https://bues.ch/](https://bues.ch/)
 
+[Git repository](https://bues.ch/cgit/shr3rs.git/)
+
 The SHR3 generator can be used to generate non-crypto random bits with only very few computations.
 
 It is suitable for running on very small and restricted hardware (e.g. small 8 bit microcontrollers).
