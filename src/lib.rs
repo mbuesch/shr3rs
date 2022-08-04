@@ -53,7 +53,7 @@
 
 pub mod prelude {
     pub use crate::Shr3;
-    pub use crate::Shr3Ops;
+    pub use crate::Shr3Ops as _;
 }
 
 #[cfg(not(feature="__devmode__"))]
